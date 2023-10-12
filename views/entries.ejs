@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Server Side Rendering</title>
+    <script type="importmap">
+      {
+      "imports": {
+        "vue": "https://unpkg.com/vue@3/dist/vue.esm-browser.js"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <h1>Server Side Rendering</h1>
+    <div id="app">
+      <%- html %>
+    </div>
+    <script type="module">
+      import { createSSRApp } from 'vue';
+      function createApp(items) {
+        return createSSRApp({
+          data: () => ({
+          items: items,
+          count: 0,
+        }),
+          methods: {
+            printlen: function() {
+              console.log(this.items.length);
+            }
+          },
+        mounted() {
+          this.count = this.items.length;
+          this.printlen();
+        },
+          template: `<%- template %>`,
+        });
+        createApp(<%- items %>).mount('#app');
+      }
+    </script>
+  </body>
+</html>
+
